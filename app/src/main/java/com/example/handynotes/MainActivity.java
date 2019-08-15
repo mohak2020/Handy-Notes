@@ -1,10 +1,12 @@
 package com.example.handynotes;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.example.handynotes.adapters.NotesAdapter;
 import com.example.handynotes.model.Note;
@@ -12,7 +14,7 @@ import com.example.handynotes.util.VerticalSpacingItemDecorator;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NotesAdapter.NotesAdapterOnclickListener {
 
     //ui components
     RecyclerView mRecycleView;
@@ -59,9 +61,18 @@ public class MainActivity extends AppCompatActivity {
     public void initRecycleView(){
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecycleView.setLayoutManager(linearLayoutManager);
-        mNoteAdapter = new NotesAdapter(mNotes);
+        mNoteAdapter = new NotesAdapter(mNotes,this);
         VerticalSpacingItemDecorator itemDecorator = new VerticalSpacingItemDecorator(10);
         mRecycleView.addItemDecoration(itemDecorator);
         mRecycleView.setAdapter(mNoteAdapter);
+    }
+
+    @Override
+    public void onItemclick(int position) {
+
+        Intent intent = new Intent(MainActivity.this,NoteActivity.class);
+        intent.putExtra("selected_note",mNotes.get(position));
+        startActivity(intent);
+
     }
 }

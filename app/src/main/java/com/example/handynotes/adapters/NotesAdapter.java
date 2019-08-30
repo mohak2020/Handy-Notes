@@ -2,6 +2,7 @@ package com.example.handynotes.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +10,13 @@ import android.widget.TextView;
 
 import com.example.handynotes.R;
 import com.example.handynotes.model.Note;
+import com.example.handynotes.util.Utility;
 
 import java.util.ArrayList;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
 
+    private static final String TAG = "NotesAdapter";
 
     public interface NotesAdapterOnclickListener{
         public void onItemclick(int position);
@@ -37,8 +40,20 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.titleView.setText(mNote.get(i).getTitle());
-        viewHolder.timestampView.setText(mNote.get(i).getTimeStamp());
+
+        try {
+
+            String month = mNote.get(i).getTimeStamp().substring(0,2);
+            month = Utility.getMonthFromNumber(month);
+            String year = mNote.get(i).getTimeStamp().substring(3);
+            String timestamp = month +" " + year;
+            viewHolder.titleView.setText(mNote.get(i).getTitle());
+            viewHolder.timestampView.setText(timestamp);
+
+        }catch (NullPointerException e){
+            Log.e(TAG, "onBindViewHolder: "+e.getMessage() );
+        }
+
     }
 
     @Override
